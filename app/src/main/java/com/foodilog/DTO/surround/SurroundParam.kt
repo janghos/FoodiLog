@@ -1,9 +1,11 @@
 package com.foodilog.DTO.surround
 
+import com.foodilog.KeyConstant
+
 data class SurroundParam(
-    val keyword : String ?= null,
-    val location : String ?= null,
-    val radius : String ?= null,
+    val keyword : String = "맛집",
+    val location: String, // 예: "37.422,-122.084"
+    val radius : Int = 1500,      // 반경 (미터 단위)
     val type : String = "restaurant",
-    val key : String = "AIzaSyANHqu3Cn0-HlzbO3H1sy-SomZcokuU810"
+    val key : String = KeyConstant.API_KEY
 )

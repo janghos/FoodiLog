@@ -3,14 +3,18 @@ package com.foodilog.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.foodilog.R
 import com.foodilog.fragment.CommonDialogFragment
+import com.foodilog.shop.ShopViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 open class BaseActivity : AppCompatActivity() {
+    lateinit var shopViewModel: ShopViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        shopViewModel = ViewModelProvider(this).get(ShopViewModel::class.java)
     }
 
     fun commonDialogAlert(string : String, function: Function<R>?){

@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.foodilog.R
 import com.foodilog.databinding.ActivityMainBinding
+import com.foodilog.fragment.HomeFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -14,12 +15,13 @@ class MainActivity : BaseActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.bottomNav.itemIconTintList = null
+        replaceFragment(HomeFragment())
 
+        binding.bottomNav.itemIconTintList = null
         binding.bottomNav.setOnItemSelectedListener { menuItem ->
             when(menuItem.itemId) {
                 R.id.home_fragment -> {
-
+                    replaceFragment(HomeFragment())
                     true
                 }
 
