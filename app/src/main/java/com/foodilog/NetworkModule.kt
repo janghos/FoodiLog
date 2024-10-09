@@ -33,7 +33,7 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("http://192.168.219.107:8080") // 서버 주소에 맞게 설정
+            .baseUrl("https://maps.googleapis.com/maps/api/") // 서버 주소에 맞게 설정
             .client(client)
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())

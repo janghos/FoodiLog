@@ -1,5 +1,6 @@
 package com.foodilog
 
+import com.foodilog.DTO.surround.SurroundParam
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Response
@@ -14,5 +15,6 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiClient {
-
+    @POST("/place/nearbysearch/json")
+    suspend fun registerMember(@Body param: SurroundParam)
 }
