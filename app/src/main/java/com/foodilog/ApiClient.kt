@@ -16,5 +16,5 @@ import retrofit2.http.Query
 
 interface ApiClient {
     @POST("/place/nearbysearch/json")
-    suspend fun registerMember(@Body param: SurroundParam)
+    suspend fun searchNearbyRestaurant(@Body param: SurroundParam)
 }

@@ -33,25 +33,29 @@ open class BaseActivity : AppCompatActivity() {
         commonDialogFragment.show(supportFragmentManager, "alert")
     }
 
-    fun commonDialogConfirm(string : String, function: Function<R>){
+    fun commonDialogConfirm(title: String, okString : String?, noString : String?, function: () -> Unit, rejectFunction: () -> Unit) {
         val commonDialogFragment = CommonDialogFragment()
         val bundle = Bundle().apply {
-            putString("title", string)
+            putString("title", title)
+            okString?.let {
+                putString("yes", it)
+            }
+            noString?.let {
+                putString("no", it)
+            }
         }
         commonDialogFragment.arguments = bundle
         commonDialogFragment.setOnResultListener(object : CommonDialogFragment.OnResultListener {
             override fun onYes() {
-                function
+                function()  // 함수 실행
             }
 
             override fun onNo() {
-                TODO("Not yet implemented")
+                rejectFunction()  // 함수 실행
             }
-
         })
         commonDialogFragment.show(supportFragmentManager, "confirm")
     }
-
     fun replaceFragment(fragment: Fragment){
         supportFragmentManager.beginTransaction().replace(R.id.fm_container,fragment).addToBackStack(null).commit()
     }

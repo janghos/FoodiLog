@@ -35,6 +35,14 @@ class CommonDialogFragment : DialogFragment() {
                 title = notNullTitle
             }
 
+            it.getString("yes")?.let {
+                binding.btnYes.text = it
+            }
+
+            it.getString("no")?.let {
+                binding.btnNo.text = it
+            }
+
             it.getBoolean("alert")?.let { alert ->
                 if(alert){
                     makeAlert()
