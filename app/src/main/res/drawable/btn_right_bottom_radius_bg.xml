@@ -2,7 +2,7 @@
     <!-- 버튼이 눌렸을 때의 배경색 -->
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <solid android:color="@color/color_48d1cc" />
+            <solid android:color="@color/color_ff0000" />
             <corners
                 android:bottomRightRadius="20dp"/>
         </shape>
@@ -22,7 +22,7 @@
     <!-- 기본 배경색 -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="@color/color_48d1cc" />
+            <solid android:color="@color/color_ff0000" />
             <corners
                 android:bottomRightRadius="20dp"/>
         </shape>

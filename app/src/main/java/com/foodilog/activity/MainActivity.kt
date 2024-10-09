@@ -3,10 +3,36 @@ package com.foodilog.activity
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.foodilog.R
+import com.foodilog.databinding.ActivityMainBinding
+import dagger.hilt.android.AndroidEntryPoint
 
-class MainActivity : AppCompatActivity() {
+@AndroidEntryPoint
+class MainActivity : BaseActivity() {
+    private lateinit var binding : ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        binding.bottomNav.itemIconTintList = null
+
+        binding.bottomNav.setOnItemSelectedListener { menuItem ->
+            when(menuItem.itemId) {
+                R.id.home_fragment -> {
+
+                    true
+                }
+
+                R.id.setting_fragment -> {
+                    true
+                }
+
+                R.id.history_fragment -> {
+
+                    true
+                }
+            }
+            false
+        }
     }
 }

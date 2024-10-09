@@ -2,10 +2,13 @@ package com.foodilog.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.fragment.app.Fragment
 import com.foodilog.R
 import com.foodilog.fragment.CommonDialogFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-class BaseActivity : AppCompatActivity() {
+@AndroidEntryPoint
+open class BaseActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -47,5 +50,12 @@ class BaseActivity : AppCompatActivity() {
 
         })
         commonDialogFragment.show(supportFragmentManager, "confirm")
+    }
+
+    fun replaceFragment(fragment: Fragment){
+        supportFragmentManager.beginTransaction().replace(R.id.fm_container,fragment).addToBackStack(null).commit()
+    }
+    fun addFragment(fragment: Fragment){
+        supportFragmentManager.beginTransaction().add(R.id.fm_container,fragment).addToBackStack(null).commit()
     }
 }
