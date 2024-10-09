@@ -19,17 +19,17 @@ data class Result(
     @SerialName("name")
     val name: String,
     @SerialName("opening_hours")
-    val openingHours: OpeningHours,
+    val openingHours: OpeningHours?,
     @SerialName("photos")
-    val photos: List<Photo>,
+    val photos: List<Photo>?,
     @SerialName("place_id")
     val placeId: String,
     @SerialName("plus_code")
-    val plusCode: PlusCode,
+    val plusCode: PlusCode?,
     @SerialName("price_level")
-    val priceLevel: Int,
+    val priceLevel: Int?,
     @SerialName("rating")
-    val rating: Double,
+    val rating: Double?,
     @SerialName("reference")
     val reference: String,
     @SerialName("scope")
@@ -37,7 +37,7 @@ data class Result(
     @SerialName("types")
     val types: List<String>,
     @SerialName("user_ratings_total")
-    val userRatingsTotal: Int,
+    val userRatingsTotal: Int?,
     @SerialName("vicinity")
     val vicinity: String
 )
