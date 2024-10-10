@@ -29,13 +29,20 @@ class SplashActivity : BaseActivity() {
         setContentView(R.layout.activity_splash)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        requestPermission()
+        // 권한이 허용되어 있으면 getLastLocation() 실행
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            getLastLocation()
+        } else {
+            // 권한이 없으면 권한 요청
+            requestPermission()
+        }
     }
 
     override fun onRestart() {
         super.onRestart()
         requestPermission()
     }
+
 
     private fun saveLocationAndProceed(location: Location) {
         // 실제 위치 정보를 사용
