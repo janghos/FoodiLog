@@ -23,7 +23,7 @@ data class Result(
     @SerialName("photos")
     val photos: List<Photo>?,
     @SerialName("place_id")
-    val placeId: String,
+    val place_id: String,
     @SerialName("plus_code")
     val plusCode: PlusCode?,
     @SerialName("price_level")

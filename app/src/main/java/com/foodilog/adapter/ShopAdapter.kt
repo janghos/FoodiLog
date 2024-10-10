@@ -7,14 +7,59 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.foodilog.DTO.Shop
 import com.foodilog.databinding.SurroundShopListBinding
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.fitness.data.Field
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FetchPhotoRequest
+import com.google.android.libraries.places.api.net.FetchPhotoResponse
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.FetchPlaceResponse
+import com.google.android.libraries.places.api.net.PlacesClient
 
-class ShopAdapter(private val shopList: List<Shop>) : RecyclerView.Adapter<ShopAdapter.ShopViewHolder>() {
+class ShopAdapter(private val shopList: List<Shop>, placesClient: PlacesClient) : RecyclerView.Adapter<ShopAdapter.ShopViewHolder>() {
+
+    val placesClient = placesClient
 
     inner class ShopViewHolder(private val binding: SurroundShopListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(shop: Shop) {
-            shop.imageUrl?.let {
-                binding.ivShopImage.setImageURI(Uri.parse(it))
-            }
+            // Define a Place ID.
+            val placeId = shop.placeId
+            val fields = listOf(Place.Field.PHOTO_METADATAS)
+
+
+            val placeRequest = FetchPlaceRequest.newInstance(placeId, fields)
+
+            placesClient.fetchPlace(placeRequest)
+                .addOnSuccessListener { response: FetchPlaceResponse ->
+                    val place = response.place
+
+                    // Get the photo metadata.
+                    val metada = place.photoMetadatas
+                    if (metada == null || metada.isEmpty()) {
+                        return@addOnSuccessListener
+                    }
+                    val photoMetadata = metada.first()
+
+                    // Get the attribution text.
+                    val attributions = photoMetadata?.attributions
+
+                    // Create a FetchPhotoRequest.
+                    val photoRequest = FetchPhotoRequest.builder(photoMetadata)
+                        .setMaxWidth(500) // Optional.
+                        .setMaxHeight(300) // Optional.
+                        .build()
+                    placesClient.fetchPhoto(photoRequest)
+                        .addOnSuccessListener { fetchPhotoResponse: FetchPhotoResponse ->
+                            val bitmap = fetchPhotoResponse.bitmap
+                            binding.ivShopImage.setImageBitmap(bitmap)
+                        }.addOnFailureListener { exception: Exception ->
+                            if (exception is ApiException) {
+                                val statusCode = exception.statusCode
+                                TODO("Handle error with given status code.")
+                            }
+                        }
+                }
+
             binding.tvShopName.text = shop.name
             binding.tvShopAddress.text = shop.address
 

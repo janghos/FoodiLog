@@ -19,16 +19,24 @@ import com.foodilog.SharedPrefHandler
 import com.foodilog.activity.BaseActivity
 import com.foodilog.adapter.ShopAdapter
 import com.foodilog.databinding.FragmentHomeBinding
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.kotlin.place
+import com.google.android.libraries.places.api.net.PlacesClient
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.invoke.ConstantCallSite
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment() {
+    lateinit var placesClient: PlacesClient
     lateinit var binding: FragmentHomeBinding
     private val pref by lazy { FoodilogApplication.prefs } // Lazy 초기화
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = FragmentHomeBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
+
+        Places.initialize(requireContext(), "키대체")
+        // Create PlacesClient
+        placesClient = Places.createClient(requireContext())
     }
 
     override fun onCreateView(
@@ -47,19 +55,16 @@ class HomeFragment : BaseFragment() {
         return binding.root
     }
 
-    private fun initializer() {
-    }
-
     private fun observe() {
         (requireActivity() as BaseActivity).shopViewModel.shopFetchResult.observe(requireActivity()) { result ->
             result.onSuccess { response ->
                 val shops = mutableListOf<Shop>()
 
                 response.results.forEach { shopResult ->
-
+                    Log.d("shopresulttt", shopResult.place_id)
                     // 매장 이름과 주소 등 기본 정보
                     val shop = Shop(
-                        imageUrl = null,
+                        placeId = shopResult.place_id,
                         name = shopResult.name,
                         address = shopResult.vicinity,
                         latitude = shopResult.geometry.location.lat,
@@ -69,7 +74,7 @@ class HomeFragment : BaseFragment() {
                     shops.add(shop)
                 }
 
-                binding.rvShopList.adapter = ShopAdapter(shops) // 어댑터에 리스트 전달
+                binding.rvShopList.adapter = ShopAdapter(shops, placesClient) // 어댑터에 리스트 전달
                 binding.rvShopList.layoutManager = LinearLayoutManager(requireContext())
             }.onFailure {
                 Toast.makeText(requireContext(), "네트워크 확인", Toast.LENGTH_SHORT).show()
