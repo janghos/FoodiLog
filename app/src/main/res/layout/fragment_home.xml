@@ -21,8 +21,10 @@
             android:textColor="@color/black"
             android:fontFamily="@font/baemin"/>
 
-        <ImageView
+        <com.google.android.material.imageview.ShapeableImageView
+            android:src="@drawable/no_image"
             android:id="@+id/iv_recent"
+            android:scaleType="centerCrop"
             android:layout_width="300dp"
             android:layout_height="200dp"
             android:layout_below="@+id/tv_review"

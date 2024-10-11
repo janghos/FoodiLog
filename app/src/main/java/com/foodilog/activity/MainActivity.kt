@@ -1,9 +1,11 @@
 package com.foodilog.activity
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.foodilog.R
 import com.foodilog.databinding.ActivityMainBinding
+import com.foodilog.fragment.HistoryFragment
 import com.foodilog.fragment.HomeFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,12 +27,12 @@ class MainActivity : BaseActivity() {
                     true
                 }
 
-                R.id.setting_fragment -> {
+                R.id.history_fragment -> {
+                    replaceFragment(HistoryFragment())
                     true
                 }
 
-                R.id.history_fragment -> {
-
+                R.id.setting_fragment -> {
                     true
                 }
             }

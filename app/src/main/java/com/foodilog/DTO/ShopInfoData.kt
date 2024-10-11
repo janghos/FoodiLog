@@ -1,6 +1,6 @@
 package com.foodilog.DTO
 
-data class Shop(
+data class ShopInfoData(
     val placeId : String?= "",
     val name: String,
     val address: String,

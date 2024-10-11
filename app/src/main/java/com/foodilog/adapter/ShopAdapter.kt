@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.foodilog.DTO.Shop
+import com.foodilog.DTO.ShopInfoData
 import com.foodilog.FoodilogApplication
 import com.foodilog.R
 import com.foodilog.databinding.SurroundShopListBinding
@@ -18,12 +18,12 @@ import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 
-class ShopAdapter(private val shopList: List<Shop>, placesClient: PlacesClient) : RecyclerView.Adapter<ShopAdapter.ShopViewHolder>() {
+class ShopAdapter(private val shopInfoDataList: List<ShopInfoData>, placesClient: PlacesClient) : RecyclerView.Adapter<ShopAdapter.ShopViewHolder>() {
 
     val placesClient = placesClient
 
     inner class ShopViewHolder(private val binding: SurroundShopListBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(shop: Shop) {
+        fun bind(shopInfoData: ShopInfoData) {
 
             val radius = itemView.context.resources.getDimension(R.dimen.corner_radius)
             binding.ivShopImage.shapeAppearanceModel = binding.ivShopImage.shapeAppearanceModel
@@ -31,7 +31,7 @@ class ShopAdapter(private val shopList: List<Shop>, placesClient: PlacesClient) 
                 .setAllCornerSizes(radius)
                 .build()
 
-            val placeId = shop.placeId
+            val placeId = shopInfoData.placeId
             val fields = listOf(Place.Field.PHOTO_METADATAS)
 
 
@@ -53,10 +53,10 @@ class ShopAdapter(private val shopList: List<Shop>, placesClient: PlacesClient) 
                     placesClient.fetchPhoto(photoRequest)
                         .addOnSuccessListener { fetchPhotoResponse: FetchPhotoResponse ->
 
-                            binding.ivShopImage.tag = shop.placeId
+                            binding.ivShopImage.tag = shopInfoData.placeId
 
                             val bitmap = fetchPhotoResponse.bitmap
-                            if (binding.ivShopImage.tag == shop.placeId) {
+                            if (binding.ivShopImage.tag == shopInfoData.placeId) {
                                 binding.ivShopImage.setImageBitmap(bitmap)
                             }
 
@@ -67,16 +67,16 @@ class ShopAdapter(private val shopList: List<Shop>, placesClient: PlacesClient) 
                         }
                 }
 
-            binding.tvShopName.text = shop.name
-            binding.tvShopAddress.text = shop.address
+            binding.tvShopName.text = shopInfoData.name
+            binding.tvShopAddress.text = shopInfoData.address
 
-            val latitude = shop.latitude
-            val longitude = shop.longitude
+            val latitude = shopInfoData.latitude
+            val longitude = shopInfoData.longitude
 
             // 네이버 지도 URI
-            val naverMapUri = Uri.parse("nmap://place?lat=$latitude&lng=$longitude&name=${shop.name}")
+            val naverMapUri = Uri.parse("nmap://place?lat=$latitude&lng=$longitude&name=${shopInfoData.name}")
             // 구글 지도 명시적으로 호출
-            val googleMapUri = Uri.parse("http://maps.google.com/maps?q=loc:$latitude,$longitude")
+            val googleMapUri = Uri.parse("geo:0,0?q=${shopInfoData.name},${shopInfoData.address}")
 
             binding.ivMap.setOnClickListener {
                 // 우선 네이버 지도 앱이 설치되어 있는지 확인
@@ -103,8 +103,8 @@ class ShopAdapter(private val shopList: List<Shop>, placesClient: PlacesClient) 
     }
 
     override fun onBindViewHolder(holder: ShopViewHolder, position: Int) {
-        holder.bind(shopList[position])
+        holder.bind(shopInfoDataList[position])
     }
 
-    override fun getItemCount(): Int = shopList.size
+    override fun getItemCount(): Int = shopInfoDataList.size
 }
