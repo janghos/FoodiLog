@@ -27,8 +27,11 @@
         android:isIndicator="false"
         android:secondaryProgressTint="@android:color/transparent"
         android:progressTint="@color/quantum_yellow"
+        android:progressBackgroundTint="@color/color_e3e3e3"
         android:backgroundTint="@color/quantum_yellow"
         android:numStars="5"
         android:stepSize="0.5"
+        android:animationResolution="0"
+        android:stateListAnimator="@null"
         android:rating="3.5" />
 </RelativeLayout>
