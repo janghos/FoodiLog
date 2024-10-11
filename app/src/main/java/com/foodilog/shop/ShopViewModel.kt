@@ -1,5 +1,6 @@
 package com.foodilog.shop
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -22,6 +23,15 @@ class ShopViewModel @Inject constructor(
         viewModelScope.launch {
             val result = shopRepository.getShopList(param)
             shopFetchResult.postValue(result)
+        }
+    }
+
+    private val _searchResults = MutableLiveData<Result<SearchSurroundAreaData>>()
+    val searchResults: LiveData<Result<SearchSurroundAreaData>> = _searchResults
+
+    fun searchPlaces(query: String, apiKey: String) {
+        viewModelScope.launch {
+            _searchResults.value = shopRepository.searchPlaces(query, apiKey)
         }
     }
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/radius_gray_20d"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="400dp"
+    tools:context=".fragment.SearchDialogFragment">
+
+    <EditText
+        android:id="@+id/et_search_shop"
+        android:hint="검색할 매장명을 입력해주세요."
+        android:textSize="20dp"
+        android:layout_marginVertical="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="60dp"
+        android:background="@drawable/btn_corners_20d"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"/>
+
+    <ImageView
+        android:id="@+id/iv_close"
+        android:padding="25dp"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_close_24"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search_shop"
+        android:layout_below="@id/et_search_shop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="10dp"/>
+
+</RelativeLayout>

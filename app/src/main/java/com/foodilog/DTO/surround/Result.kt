@@ -6,6 +6,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Result(
+    @SerialName("formatted_address")
+    val formatted_address : String,
     @SerialName("business_status")
     val businessStatus: String,
     @SerialName("geometry")

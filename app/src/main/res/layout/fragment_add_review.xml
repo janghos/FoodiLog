@@ -50,15 +50,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+         <LinearLayout
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             android:orientation="horizontal">
+
             <TextView
                 android:layout_gravity="center"
                 android:fontFamily="@font/baemin"
                 android:textSize="17dp"
                 android:textColor="@color/black"
                 android:text="식당 장소"
-                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
 
+             <Button
+                 android:id="@+id/re_search"
+                 android:visibility="gone"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:background="@drawable/btn_48d1cc_20d"
+                 android:paddingHorizontal="10dp"
+                 android:textColor="@color/white"
+                 android:fontFamily="@font/baemin"
+                 android:text="다시 검색"/>
+
+        </LinearLayout>
             <com.google.android.gms.maps.MapView
                 android:id="@+id/map"
                 android:visibility="gone"
@@ -79,7 +97,7 @@
                 android:layout_height="match_parent"/>
 
             <LinearLayout
-                android:visibility="d"
+                android:visibility="gone"
                 android:id="@+id/ll_shop_review"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

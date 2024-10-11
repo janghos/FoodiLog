@@ -24,4 +24,12 @@ interface ApiClient {
         @Query("key") apiKey: String,
         @Query("language") language : String = "ko"
     ): SearchSurroundAreaData
+
+    @GET("place/textsearch/json")
+    suspend fun searchPlaces(
+        @Query("query") query: String,
+        @Query("key") apiKey: String,
+        @Query("type") type: String = "restaurant",
+        @Query("language") language : String = "ko"
+    ): SearchSurroundAreaData
 }

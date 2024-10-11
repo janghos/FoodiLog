@@ -23,4 +23,13 @@ class ShopRepository @Inject constructor(
             Result.failure(e) // 에러 발생 시
         }
     }
+
+    suspend fun searchPlaces(query: String, apiKey: String): Result<SearchSurroundAreaData> {
+        return try {
+            val response = apiClient.searchPlaces(query, apiKey)
+            Result.success(response)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }
