@@ -33,6 +33,7 @@
             android:name=".activity.BaseActivity"
             android:exported="false" />
         <activity
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation"
             android:name=".activity.SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -43,6 +44,7 @@
         </activity>
 
         <activity
+            android:configChanges="orientation|screenSize|keyboard|keyboardHidden|navigation"
             android:name=".activity.MainActivity"
             android:exported="true">
 

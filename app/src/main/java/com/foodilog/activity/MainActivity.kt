@@ -1,8 +1,7 @@
 package com.foodilog.activity
-
-import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import androidx.constraintlayout.widget.ConstraintLayout
 import com.foodilog.R
 import com.foodilog.databinding.ActivityMainBinding
 import com.foodilog.fragment.HistoryFragment
@@ -38,5 +37,19 @@ class MainActivity : BaseActivity() {
             }
             false
         }
+    }
+
+    fun goneNav() {
+        binding.bottomNav.visibility = View.GONE
+        val layoutParams = binding.fmContainer.layoutParams as ConstraintLayout.LayoutParams
+        layoutParams.bottomMargin = 0
+        binding.fmContainer.layoutParams = layoutParams
+    }
+
+    fun visibleNav() {
+        binding.bottomNav.visibility = View.VISIBLE
+        val layoutParams = binding.fmContainer.layoutParams as ConstraintLayout.LayoutParams
+        layoutParams.bottomMargin = resources.getDimensionPixelSize(R.dimen.bottom_nav_height)
+        binding.fmContainer.layoutParams = layoutParams
     }
 }

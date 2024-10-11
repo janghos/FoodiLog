@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.foodilog.DTO.ShopInfoData
 import com.foodilog.DTO.surround.SurroundParam
 import com.foodilog.FoodilogApplication
+import com.foodilog.KeyConstant
 import com.foodilog.PrefConstant
 import com.foodilog.R
 import com.foodilog.activity.BaseActivity
@@ -20,17 +21,13 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment() {
-    lateinit var placesClient: PlacesClient
     lateinit var binding: FragmentHomeBinding
     private val pref by lazy { FoodilogApplication.prefs }
+    private val placesClient by lazy {FoodilogApplication.placesClient}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = FragmentHomeBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
-
-        Places.initialize(requireContext(), "키대체")
-        // Create PlacesClient
-        placesClient = Places.createClient(requireContext())
     }
 
     override fun onCreateView(
