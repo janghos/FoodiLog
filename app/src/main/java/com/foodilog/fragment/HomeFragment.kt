@@ -49,6 +49,10 @@ class HomeFragment : BaseFragment() {
             .toBuilder()
             .setAllCornerSizes(radius)
             .build()
+
+        binding.btnAdd.setOnClickListener {
+            (requireActivity() as BaseActivity).replaceFragment(AddReviewFragment())
+        }
     }
     private fun callShopList(){
         val location =

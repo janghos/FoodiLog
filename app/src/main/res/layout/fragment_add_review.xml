@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="20dp"
+    tools:context=".fragment.AddReviewFragment">
+
+    <TextView
+        android:id="@+id/title"
+        android:textColor="@color/black"
+        android:text="후기 작성 화면\n\n터치를 통해 별점을 입력해주세요!"
+        android:gravity="center"
+        android:textSize="20dp"
+        android:fontFamily="@font/baemin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:padding="20dp"
+        android:layout_width="280dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/title"
+        android:layout_centerHorizontal="true"
+        android:isIndicator="false"
+        android:secondaryProgressTint="@android:color/transparent"
+        android:progressTint="@color/quantum_yellow"
+        android:backgroundTint="@color/quantum_yellow"
+        android:numStars="5"
+        android:stepSize="0.5"
+        android:rating="3.5" />
+</RelativeLayout>
