@@ -4,11 +4,13 @@ import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.foodilog.DTO.Shop
+import com.foodilog.FoodilogApplication
+import com.foodilog.R
 import com.foodilog.databinding.SurroundShopListBinding
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.fitness.data.Field
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.FetchPhotoRequest
 import com.google.android.libraries.places.api.net.FetchPhotoResponse
@@ -22,7 +24,13 @@ class ShopAdapter(private val shopList: List<Shop>, placesClient: PlacesClient) 
 
     inner class ShopViewHolder(private val binding: SurroundShopListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(shop: Shop) {
-            // Define a Place ID.
+
+            val radius = itemView.context.resources.getDimension(R.dimen.corner_radius)
+            binding.ivShopImage.shapeAppearanceModel = binding.ivShopImage.shapeAppearanceModel
+                .toBuilder()
+                .setAllCornerSizes(radius)
+                .build()
+
             val placeId = shop.placeId
             val fields = listOf(Place.Field.PHOTO_METADATAS)
 
@@ -40,22 +48,21 @@ class ShopAdapter(private val shopList: List<Shop>, placesClient: PlacesClient) 
                     }
                     val photoMetadata = metada.first()
 
-                    // Get the attribution text.
-                    val attributions = photoMetadata?.attributions
-
-                    // Create a FetchPhotoRequest.
                     val photoRequest = FetchPhotoRequest.builder(photoMetadata)
-                        .setMaxWidth(500) // Optional.
-                        .setMaxHeight(300) // Optional.
                         .build()
                     placesClient.fetchPhoto(photoRequest)
                         .addOnSuccessListener { fetchPhotoResponse: FetchPhotoResponse ->
+
+                            binding.ivShopImage.tag = shop.placeId
+
                             val bitmap = fetchPhotoResponse.bitmap
-                            binding.ivShopImage.setImageBitmap(bitmap)
+                            if (binding.ivShopImage.tag == shop.placeId) {
+                                binding.ivShopImage.setImageBitmap(bitmap)
+                            }
+
                         }.addOnFailureListener { exception: Exception ->
                             if (exception is ApiException) {
-                                val statusCode = exception.statusCode
-                                TODO("Handle error with given status code.")
+                                Toast.makeText(FoodilogApplication().baseContext.applicationContext, "네트워크 오류입니다." , Toast.LENGTH_SHORT).show()
                             }
                         }
                 }

@@ -29,7 +29,8 @@ import java.lang.invoke.ConstantCallSite
 class HomeFragment : BaseFragment() {
     lateinit var placesClient: PlacesClient
     lateinit var binding: FragmentHomeBinding
-    private val pref by lazy { FoodilogApplication.prefs } // Lazy 초기화
+    private val pref by lazy { FoodilogApplication.prefs }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = FragmentHomeBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -44,15 +45,19 @@ class HomeFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         observe()
-        val location = pref.getFloat(PrefConstant.KEY_LAT, 0f).toString() + "," + pref.getFloat(
-            PrefConstant.KEY_LONG,
-            0f
-        ).toString()
+        callShopList()
+        return binding.root
+    }
+
+    private fun callShopList(){
+        val location =
+            pref.getFloat(PrefConstant.KEY_LAT, 0f).toString() +
+                    "," +
+                    pref.getFloat(PrefConstant.KEY_LONG, 0f).toString()
         val param = SurroundParam(
             location = location
         )
         (requireActivity() as BaseActivity).shopViewModel.fetchShopList(param)
-        return binding.root
     }
 
     private fun observe() {
@@ -61,7 +66,6 @@ class HomeFragment : BaseFragment() {
                 val shops = mutableListOf<Shop>()
 
                 response.results.forEach { shopResult ->
-                    Log.d("shopresulttt", shopResult.place_id)
                     // 매장 이름과 주소 등 기본 정보
                     val shop = Shop(
                         placeId = shopResult.place_id,
@@ -74,8 +78,9 @@ class HomeFragment : BaseFragment() {
                     shops.add(shop)
                 }
 
-                binding.rvShopList.adapter = ShopAdapter(shops, placesClient) // 어댑터에 리스트 전달
+                binding.rvShopList.adapter = ShopAdapter(shops, placesClient)
                 binding.rvShopList.layoutManager = LinearLayoutManager(requireContext())
+
             }.onFailure {
                 Toast.makeText(requireContext(), "네트워크 확인", Toast.LENGTH_SHORT).show()
             }
