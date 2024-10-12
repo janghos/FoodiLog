@@ -22,7 +22,7 @@ open class BaseActivity : AppCompatActivity() {
         shopViewModel = ViewModelProvider(this).get(ShopViewModel::class.java)
     }
 
-    fun commonDialogAlert(string : String, function: Function<R>?){
+    fun commonDialogAlert(string : String, function: () -> Unit){
         val commonDialogFragment = CommonDialogFragment()
         val bundle = Bundle().apply {
             putString("title", string)
@@ -31,11 +31,10 @@ open class BaseActivity : AppCompatActivity() {
         commonDialogFragment.arguments = bundle
         commonDialogFragment.setOnResultListener(object : CommonDialogFragment.OnResultListener {
             override fun onYes() {
-                function
+                function()
             }
 
             override fun onNo() {
-                TODO("Not yet implemented")
             }
 
         })

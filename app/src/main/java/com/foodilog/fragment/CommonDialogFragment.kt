@@ -75,7 +75,7 @@ class CommonDialogFragment : DialogFragment() {
     fun makeAlert(btnYes : String?=null) {
         binding.btnNo.visibility = View.GONE
         binding.llPopupSize.background = resources.getDrawable(R.drawable.btn_corners_20d, null)
-        binding.btnYes.background = resources.getDrawable(R.drawable.btn_ebebeb_left_bottom_radius_bg, null)
+        binding.btnYes.background = resources.getDrawable(R.drawable.btn_bottom_radius_bg, null)
         binding.btnYes.text = btnYes ?: resources.getString(R.string.confirm)
     }
 

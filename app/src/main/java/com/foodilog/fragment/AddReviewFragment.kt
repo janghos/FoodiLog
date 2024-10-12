@@ -11,16 +11,20 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.Toast
+import androidx.activity.result.launch
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.foodilog.DTO.DateDTO
 import com.foodilog.DTO.ReviewData
 import com.foodilog.DTO.ShopInfoData
@@ -28,9 +32,12 @@ import com.foodilog.HeightProvider
 import com.foodilog.activity.BaseActivity
 import com.foodilog.activity.MainActivity
 import com.foodilog.databinding.FragmentAddReviewBinding
+import com.foodilog.local.FoodiDataBase
+import com.foodilog.local.ReviewEntity
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
@@ -45,34 +52,31 @@ class AddReviewFragment : Fragment() {
         private const val REQUEST_IMAGE_CAPTURE = 300
     }
 
-    lateinit var binding : FragmentAddReviewBinding
+    private var _binding: FragmentAddReviewBinding? = null // binding을 nullable로 선언
+    private val binding get() = _binding!! // binding에 접근할 때 non-null assertion 사용
     private var heightProvider : HeightProvider ?= null
     private var mShopInfoData : ShopInfoData ?=null
     private var mSelectedImageUri: Uri? = null
     private var mSelectedImageUris: MutableList<Uri> = mutableListOf()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        binding = FragmentAddReviewBinding.inflate(layoutInflater)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        initialization()
+        _binding = FragmentAddReviewBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initialization()
         binding.map.onCreate(savedInstanceState)
         binding.map.onResume()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-
+        _binding = null
         heightProvider?.let {
             it.dismiss()
         }
@@ -157,40 +161,55 @@ class AddReviewFragment : Fragment() {
     }
 
     private fun saveReviewData() {
-        // 이미지 Uri가 있는 경우에만 데이터 저장
-        if (mSelectedImageUri != null) {
+        if (binding.etReviewTitle.text.toString().isNotEmpty() && binding.etReviewContent.text.toString().isNotEmpty()) {
             try {
-                // 이미지 로컬 저장
-                val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, mSelectedImageUri)
-                val imageFile = createImageFile()
-                val outputStream = FileOutputStream(imageFile)
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-                outputStream.flush()
-                outputStream.close()
 
+                if (mSelectedImageUri != null) { // null 체크 추가
+                    // 이미지 로컬 저장
+                    val bitmap = MediaStore.Images.Media.getBitmap(requireContext().contentResolver, mSelectedImageUri)
+                    val imageFile = createImageFile()
+                    val outputStream = FileOutputStream(imageFile)
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
+                    outputStream.flush()
+                    outputStream.close()
+                }
                 // 데이터 저장
                 val reviewTitle = binding.etReviewTitle.text.toString()
                 val reviewContent = binding.etReviewContent.text.toString()
                 val rating = binding.ratingBar.rating
                 val date = binding.tvDate.text.toString() // "2024년 00월 00일" 형식
 
-                val reviewData = ReviewData(
-                    reviewShopInfo = mShopInfoData,
+
+                val reviewEntity = ReviewEntity(
+                    shopName = mShopInfoData?.name,
+                    shopAddress = mShopInfoData?.address,
                     reviewTitle = reviewTitle,
                     reviewContent = reviewContent,
                     rating = rating,
                     date = date,
-                    imagePath = mSelectedImageUris.map { it.toString() } // Uri 리스트를 문자열 리스트
+                    imagePaths = mSelectedImageUris.map { it.toString() },
+                    latitude = mShopInfoData?.latitude ?: 0.0,
+                    longitude = mShopInfoData?.longitude ?: 0.0
+
                 )
 
-                // TODO: reviewData를 로컬 데이터베이스 또는 파일에 저장
+                // 데이터베이스에 저장
+                lifecycleScope.launch {
+                    FoodiDataBase.getDatabase(requireContext()).reviewDao().insertReview(reviewEntity)
+                }
 
+                (requireActivity() as BaseActivity).commonDialogAlert("저장이 완료되었습니다!") { replaceHistoryFragment() }
             } catch (e: Exception) {
+                Log.d("errorrrrrr", e.toString())
                 e.printStackTrace()
             }
         } else {
-            // 이미지가 선택되지 않은 경우 처리 (예: 토스트 메시지 표시)
+            Toast.makeText(requireContext(),"제목과 내용을 입력해주세요!", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun replaceHistoryFragment(){
+        (requireActivity() as MainActivity).replaceFragment(HistoryFragment())
     }
 
     // 이미지 파일 생성
@@ -247,15 +266,9 @@ class AddReviewFragment : Fragment() {
 
             val imageView = ImageView(requireContext())
             imageView.setImageURI(imageUri)
-            imageView.layoutParams = LinearLayout.LayoutParams(300, 300) // 이미지뷰 크기 설정
-            imageView.scaleType = ImageView.ScaleType.CENTER_CROP // 이미지뷰 scaleType 설정
-
-            // 이미지뷰 클릭 리스너 추가 (수정 기능)
-            imageView.setOnClickListener {
-                // TODO: 이미지 수정 기능 구현
-            }
-
-            binding.imageContainer.addView(imageView) // imageContainer는 LinearLayout
+            imageView.layoutParams = LinearLayout.LayoutParams(300, 300)
+            imageView.scaleType = ImageView.ScaleType.CENTER_CROP
+            binding.imageContainer.addView(imageView)
 
             // 추가 버튼 숨기기/표시
             if (mSelectedImageUris.size == 3) {
