@@ -6,6 +6,7 @@ import com.foodilog.R
 import com.foodilog.databinding.ActivityMainBinding
 import com.foodilog.fragment.HistoryFragment
 import com.foodilog.fragment.HomeFragment
+import com.foodilog.fragment.SettingFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,6 +33,7 @@ class MainActivity : BaseActivity() {
                 }
 
                 R.id.setting_fragment -> {
+                    replaceFragment(SettingFragment())
                     true
                 }
             }
