@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout
+    android:background="@drawable/btn_corners_20d"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/ib_close"
+            android:padding="30dp"
+            android:src="@drawable/icon_close_black"
+            android:textSize="20dp"
+            android:background="@null"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:elevation="10dp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="582dp"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:background="@drawable/btn_corners_20d"
+            android:paddingBottom="50dp"
+            android:orientation="vertical">
+
+
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/calendar_view"
+                android:layout_marginTop="50dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:theme="@style/CalenderViewCustom"
+                app:mcv_selectionMode="range"
+                app:mcv_showOtherDates="all"
+                app:mcv_firstDayOfWeek="sunday"
+                app:mcv_rightArrow="@color/white"
+                app:mcv_leftArrow="@color/white"
+                app:mcv_weekDayTextAppearance="@style/CalenderViewWeekCustomText"
+                app:mcv_dateTextAppearance="@style/CalenderViewDateCustomText" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:visibility="gone"
+                    android:id="@+id/tv_total_day"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginRight="50dp"
+                    android:fontFamily="@font/baemin"
+                    android:includeFontPadding="false"
+                    android:paddingLeft="50dp"
+                    android:paddingTop="8dp"
+                    android:text="총 18일"
+                    android:textColor="@color/black"
+                    android:textSize="24dp"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_apply_date"
+                    android:layout_width="120dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginRight="50dp"
+                    android:background="@drawable/btn_orange_bg"
+                    android:includeFontPadding="false"
+                    android:text="확인"
+                    android:textColor="@color/white"
+                    android:stateListAnimator="@null"
+                    android:fontFamily="@font/baemin"
+                    android:textSize="22dp" />
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>

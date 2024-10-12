@@ -6,25 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.RatingBar
+import com.foodilog.DTO.DateDTO
+import com.foodilog.DTO.ReviewData
 import com.foodilog.DTO.ShopInfoData
-import com.foodilog.DeviceUtil
-import com.foodilog.FoodilogApplication
 import com.foodilog.HeightProvider
 import com.foodilog.R
-import com.foodilog.activity.BaseActivity
 import com.foodilog.activity.MainActivity
 import com.foodilog.databinding.FragmentAddReviewBinding
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.foodilog.fragment.NewSellCalendarDialogFragment
 
 class AddReviewFragment : Fragment() {
 
     lateinit var binding : FragmentAddReviewBinding
-    private val placesClient by lazy { FoodilogApplication.placesClient}
     private var heightProvider : HeightProvider ?= null
+    private var mReviewData : ReviewData?= null
+    private var mShopInfoData : ShopInfoData ?=null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = FragmentAddReviewBinding.inflate(layoutInflater)
@@ -53,6 +53,9 @@ class AddReviewFragment : Fragment() {
     }
 
     fun onShopInfoSelected(shopInfoData: ShopInfoData) {
+
+        mShopInfoData = shopInfoData
+
         binding.llShopReview.visibility = View.VISIBLE
         binding.map.visibility = View.VISIBLE
         binding.tvShopTitle.text = shopInfoData.name
@@ -80,6 +83,16 @@ class AddReviewFragment : Fragment() {
 
         binding.reSearch.setOnClickListener{
             SearchDialogFragment().show(childFragmentManager, "search")
+        }
+
+        binding.tvDate.setOnClickListener {
+            val calendarDialog = NewSellCalendarDialogFragment.newInstance()
+            calendarDialog.setOnDateSelectListener(object : NewSellCalendarDialogFragment.OnDateSelectListener{
+                override fun onSingleDateSelect(selectDate: DateDTO) {
+                    binding.tvDate.text = "${selectDate.year}년 ${selectDate.month}월 ${selectDate.day}일"
+                }
+            })
+            calendarDialog.show(childFragmentManager, "calendar")
         }
 
 

@@ -4,11 +4,10 @@ import android.media.Image
 import java.util.Date
 
 data class ReviewData(
-    val rating : String ?= "",
-    val shopName : String ?= "",
-    val shopAddress : String ?= "",
-    val reviewTitle : String ?= "",
     val date : Date,
+    val rating : String ?= "",
+    val reviewShopInfo : ShopInfoData ?= null,
+    val reviewTitle : String ?= "",
     val reviewContent : String ?= "",
     val reviewImage : List<Image> ?= null
 )
