@@ -1,95 +1,68 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingHorizontal="20dp"
     tools:context=".fragment.HomeFragment">
 
-    <RelativeLayout
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <TextView
-            android:paddingVertical="20dp"
             android:id="@+id/tv_review"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/baemin"
+            android:paddingVertical="20dp"
             android:text="최근 등록한 리뷰"
-            android:textSize="20dp"
             android:textColor="@color/black"
-            android:fontFamily="@font/baemin"/>
+            android:textSize="20dp" />
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:src="@drawable/no_image"
-            android:id="@+id/iv_recent"
-            android:scaleType="centerCrop"
-            android:layout_width="300dp"
-            android:layout_height="200dp"
-            android:layout_below="@+id/tv_review"
-            android:layout_centerInParent="true" />
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewpager_recent_reviews"
+            android:layout_width="match_parent"
+            android:layout_height="260dp" />
 
-        <LinearLayout
-            android:id="@+id/ll_recent"
-            android:layout_below="@+id/iv_recent"
-            android:gravity="center"
-            android:orientation="vertical"
-            android:layout_width="250dp"
-            android:layout_height="75dp"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="-50dp"
-            android:background="@drawable/btn_corners_20d"
-            android:elevation="10dp">
-
-            <ImageView
-                android:id="@+id/iv_recent_star"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"/>
-
-            <TextView
-                android:id="@+id/tv_recent_shop"
-                android:textSize="12dp"
-                android:textColor="@color/black"
-                android:fontFamily="@font/baemin"
-                android:text="최근 등록된 리뷰가 없습니다."
-                android:gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout_recent_reviews"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            app:tabBackground="@drawable/tab_selector"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp" />
 
         <TextView
             android:id="@+id/tv_surround_shop"
-            android:layout_below="@id/ll_recent"
-            android:paddingVertical="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/tab_layout_recent_reviews"
+            android:fontFamily="@font/baemin"
+            android:paddingVertical="20dp"
             android:text="근처 맛집"
-            android:textSize="20dp"
             android:textColor="@color/black"
-            android:fontFamily="@font/baemin"/>
+            android:textSize="20dp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_shop_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/tv_surround_shop"/>
+            android:layout_below="@+id/tv_surround_shop" />
+    </LinearLayout>
 
-        <Button
-            android:id="@+id/btn_add"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_margin="10dp"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:text="+"
-            android:textSize="30dp"
-            android:textColor="@color/white"
-            android:background="@drawable/btn_48d1cc_20d"/>
+    <Button
+        android:id="@+id/btn_add"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10dp"
+        android:background="@drawable/btn_48d1cc_20d"
+        android:text="+"
+        android:textColor="@color/white"
+        android:textSize="30dp" />
 
-    </RelativeLayout>
-
-
-</LinearLayout>
+</RelativeLayout>

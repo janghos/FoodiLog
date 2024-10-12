@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/iv_shop_image"
+        android:src="@drawable/no_image"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:fontFamily="@font/baemin"
+        android:textSize="14dp"
+        android:paddingVertical="5dp"
+        android:textColor="@color/black"
+        android:text="ㅇㅇㅇ"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <RatingBar
+        android:paddingTop="5dp"
+        android:progressTint="@color/quantum_yellow500"
+        android:secondaryProgressTint="@android:color/transparent"
+        android:progressBackgroundTint="@color/black"
+        android:id="@+id/rating_bar"
+        android:scaleX="2.0"
+        android:scaleY="2.0"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:isIndicator="true" />
+
+
+</LinearLayout>

@@ -18,6 +18,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
 
 class ReviewDetailFragment : DialogFragment() {
 
@@ -45,7 +46,7 @@ class ReviewDetailFragment : DialogFragment() {
             binding.tvReviewTitle.text = "제목 : " + review.reviewTitle
             binding.tvReviewContent.text = review.reviewContent
             binding.tvRating.text = review.rating.toString()
-            binding.tvDate.text = review.date
+            binding.tvDate.text = formatDateFromLong(review.date)
 
             // 이미지 로드
             if (review.imagePaths.isNotEmpty()) {
@@ -92,5 +93,13 @@ class ReviewDetailFragment : DialogFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun formatDateFromLong(dateLong: Long): String {
+        val dateString = dateLong.toString()
+        val year = dateString.substring(0, 4)
+        val month = dateString.substring(4, 6)
+        val day = dateString.substring(6, 8)
+        return "${year}년 ${month}월 ${day}일"
     }
 }

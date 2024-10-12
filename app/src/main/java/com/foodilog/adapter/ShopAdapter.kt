@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.foodilog.DTO.ShopInfoData
 import com.foodilog.FoodilogApplication
 import com.foodilog.R
@@ -21,6 +23,9 @@ import com.google.android.libraries.places.api.net.PlacesClient
 class ShopAdapter(private val shopInfoDataList: List<ShopInfoData>, placesClient: PlacesClient) : RecyclerView.Adapter<ShopAdapter.ShopViewHolder>() {
 
     val placesClient = placesClient
+    init {
+        setHasStableIds(true)
+    }
 
     inner class ShopViewHolder(private val binding: SurroundShopListBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(shopInfoData: ShopInfoData) {
@@ -31,41 +36,7 @@ class ShopAdapter(private val shopInfoDataList: List<ShopInfoData>, placesClient
                 .setAllCornerSizes(radius)
                 .build()
 
-            val placeId = shopInfoData.placeId
-            val fields = listOf(Place.Field.PHOTO_METADATAS)
-
-
-            val placeRequest = FetchPlaceRequest.newInstance(placeId, fields)
-
-            placesClient.fetchPlace(placeRequest)
-                .addOnSuccessListener { response: FetchPlaceResponse ->
-                    val place = response.place
-
-                    // Get the photo metadata.
-                    val metada = place.photoMetadatas
-                    if (metada == null || metada.isEmpty()) {
-                        return@addOnSuccessListener
-                    }
-                    val photoMetadata = metada.first()
-
-                    val photoRequest = FetchPhotoRequest.builder(photoMetadata)
-                        .build()
-                    placesClient.fetchPhoto(photoRequest)
-                        .addOnSuccessListener { fetchPhotoResponse: FetchPhotoResponse ->
-
-                            binding.ivShopImage.tag = shopInfoData.placeId
-
-                            val bitmap = fetchPhotoResponse.bitmap
-                            if (binding.ivShopImage.tag == shopInfoData.placeId) {
-                                binding.ivShopImage.setImageBitmap(bitmap)
-                            }
-
-                        }.addOnFailureListener { exception: Exception ->
-                            if (exception is ApiException) {
-                                Toast.makeText(FoodilogApplication().baseContext.applicationContext, "네트워크 오류입니다." , Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                }
+            binding.ivShopImage.setImageBitmap(shopInfoData.bitmap) // bitmap 필드 사용
 
             binding.tvShopName.text = shopInfoData.name
             binding.tvShopAddress.text = shopInfoData.address
@@ -107,4 +78,8 @@ class ShopAdapter(private val shopInfoDataList: List<ShopInfoData>, placesClient
     }
 
     override fun getItemCount(): Int = shopInfoDataList.size
+
+    override fun getItemId(position: Int): Long {
+        return shopInfoDataList[position].placeId.hashCode().toLong()
+    }
 }

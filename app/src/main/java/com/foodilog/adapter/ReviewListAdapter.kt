@@ -7,13 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.compose.animation.with
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.semantics.text
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.foodilog.R
 import com.foodilog.local.ReviewEntity
+import java.text.SimpleDateFormat
+import java.util.Locale
+import kotlin.text.format
 
 class ReviewListAdapter(private val context: Context, private val reviewList: List<ReviewEntity>, private val itemClickListener: (ReviewEntity) -> Unit) :
     RecyclerView.Adapter<ReviewListAdapter.ViewHolder>() {
@@ -44,7 +44,7 @@ class ReviewListAdapter(private val context: Context, private val reviewList: Li
         }
 
         holder.star.text = review.rating.toString()
-        holder.date.text = review.date
+        holder.date.text = formatDateFromLong(review.date)
         holder.reviewTitle.text = review.reviewTitle
         holder.shopName.text = review.shopName
 
@@ -55,5 +55,12 @@ class ReviewListAdapter(private val context: Context, private val reviewList: Li
 
     override fun getItemCount(): Int {
         return reviewList.size
+    }
+    fun formatDateFromLong(dateLong: Long): String {
+        val dateString = dateLong.toString()
+        val year = dateString.substring(0, 4)
+        val month = dateString.substring(4, 6)
+        val day = dateString.substring(6, 8)
+        return "${year}년 ${month}월 ${day}일"
     }
 }

@@ -21,6 +21,7 @@ import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.launch
 import androidx.appcompat.app.AlertDialog
+import androidx.compose.ui.semantics.text
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -42,6 +43,10 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
+import java.util.Locale
+import kotlin.text.format
+import kotlin.text.replace
+import kotlin.text.toLong
 
 class AddReviewFragment : Fragment() {
 
@@ -112,7 +117,7 @@ class AddReviewFragment : Fragment() {
         }
 
         val calendar = Calendar.getInstance()
-        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일")
+        val dateFormat = SimpleDateFormat("yyyy년 MM월 dd일", Locale.getDefault())
         val todayDate = dateFormat.format(calendar.time)
         binding.tvDate.text = todayDate
 
@@ -120,7 +125,7 @@ class AddReviewFragment : Fragment() {
             val calendarDialog = NewSellCalendarDialogFragment.newInstance()
             calendarDialog.setOnDateSelectListener(object : NewSellCalendarDialogFragment.OnDateSelectListener{
                 override fun onSingleDateSelect(selectDate: DateDTO) {
-                    binding.tvDate.text = "${selectDate.year}년 ${selectDate.month}월 ${selectDate.day}일"
+                    binding.tvDate.text = String.format("%04d년 %02d월 %02d일", selectDate.year, selectDate.month, selectDate.day)
                 }
             })
             calendarDialog.show(childFragmentManager, "calendar")
@@ -177,8 +182,8 @@ class AddReviewFragment : Fragment() {
                 val reviewTitle = binding.etReviewTitle.text.toString()
                 val reviewContent = binding.etReviewContent.text.toString()
                 val rating = binding.ratingBar.rating
-                val date = binding.tvDate.text.toString() // "2024년 00월 00일" 형식
-
+                val dateString = binding.tvDate.text.toString() // "2024년 00월 00일" 형식
+                val dateLong = dateString.replace("[^0-9]".toRegex(), "").toLong()
 
                 val reviewEntity = ReviewEntity(
                     shopName = mShopInfoData?.name,
@@ -186,7 +191,7 @@ class AddReviewFragment : Fragment() {
                     reviewTitle = reviewTitle,
                     reviewContent = reviewContent,
                     rating = rating,
-                    date = date,
+                    date = dateLong,
                     imagePaths = mSelectedImageUris.map { it.toString() },
                     latitude = mShopInfoData?.latitude ?: 0.0,
                     longitude = mShopInfoData?.longitude ?: 0.0
