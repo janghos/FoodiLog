@@ -144,7 +144,7 @@ class AddReviewFragment : Fragment() {
             } else {
                 // 키보드가 올라왔을 때
                 (requireActivity() as MainActivity).goneNav()
-                layoutParams.height = binding.rlLayout.height - height // 높이를 줄임
+//                layoutParams.height = binding.rlLayout.height - height // 높이를 줄임
             }
             binding.rlLayout.layoutParams = layoutParams
         }
